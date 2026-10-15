@@ -12,16 +12,31 @@ body {
 }
 
 header {
-    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
     padding: 24px 20px;
+    background-color: #ffffff;
     border-bottom: 4px solid #1f6feb;
-    text-align: center;
 }
 
 header h1 {
     margin: 0;
     font-size: 2rem;
     color: #222222;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
 }
 
 main {
@@ -34,13 +49,17 @@ section {
     margin-bottom: 30px;
 }
 
+form {
+    display: block; 
+}
+
 input[type="number"], select {
     padding: 12px;
     font-size: 1.1rem;
     border: 1px solid #cccccc;
     width: 100%; 
-    display: block;
     margin-bottom: 15px;
+    display: block;
 }
 
 input[type="number"]:focus, select:focus {
@@ -51,10 +70,12 @@ input[type="number"]:focus, select:focus {
 input[type="radio"] {
     margin-right: 5px;
     margin-bottom: 20px;
+    display: inline-block;
 }
 
 label {
     margin-right: 15px;
+    display: inline-block;
 }
 
 button {
@@ -63,6 +84,9 @@ button {
     background-color: #1f6feb; 
     color: #ffffff;
     border: none;
+    width: 100%;
+    font-size: 1.1rem;
+    cursor: pointer;
 }
 
 button:hover {
@@ -74,4 +98,31 @@ footer {
     padding: 20px; 
     color: #676767;
     text-align: center; 
+}
+
+
+@media (min-width: 600px) {
+    .converter-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 15px;
+    }
+    .converter-row input[type="number"],
+    .converter-row select {
+        flex: 1; 
+        margin-bottom: 0;
+    }
+}
+
+@media (min-width: 1024px) {
+    header {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    main {
+        max-width: 800px; 
+        padding: 40px; 
+    }
 }
