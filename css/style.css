@@ -108,10 +108,21 @@ footer {
         align-items: center;
         gap: 15px;
     }
-    .converter-row input[type="number"],
     .converter-row select {
-        flex: 1; 
+        flex: 1;
         margin-bottom: 0;
+    }
+    .btn-swap {
+        width: auto;
+        padding: 10px 15px;
+        font-size: 1.2rem;
+        background-color: transparent;
+        color: #1f6feb;
+        border: 2px solid #1f6feb;
+    }
+    .btn-swap:hover {
+        background-color: #1f6feb;
+        color: #ffffff;
     }
 }
 
@@ -120,9 +131,12 @@ footer {
         flex-direction: row;
         justify-content: space-between;
     }
-
-    main {
-        max-width: 800px; 
-        padding: 40px; 
+    form {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 40px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
 }
