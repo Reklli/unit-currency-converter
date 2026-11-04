@@ -1,30 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700&display=swap');
+
 *, *::before, *::after {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    font-family: system-ui, sans-serif;
+    font-family: 'Inter', sans-serif; /* сучасний та більш привабливий шрифт для кращої читабельності */
     font-size: 1.1rem;
     line-height: 1.5;
-    color: #333333;
-    background-color: #f4f5f7;
+    color: #333333; /* темний текст для кращої читабельності */
+    background-color: #f4f7f7e7; /* нейтральний фон сторінки */
 }
 
 header {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 16px;
     padding: 24px 20px;
-    background-color: #ffffff;
-    border-bottom: 4px solid #1f6feb;
+    background-color: #ffffff; /* білий контрасний фон для заголовка */
+    border-bottom: 4px solid #1f71ebcb;
+    text-align: center;
 }
 
 header h1 {
     margin: 0;
-    font-size: 2rem;
+    font-family: 'Montserrat', sans-serif; /* більш виразний шрифт для заголовка */
+    font-size: 1.35rem;
     color: #222222;
+    text-align: center;
+    width: 100%;
+}
+
+main h2 {
+    font-family: 'Montserrat', sans-serif; /* більш виразний шрифт для підзаголовків */
+    font-size: 1.4rem;
+    color: #1a365d;
+    margin-top: 0;
+    margin-bottom: 16px;
+    margin-left: 0px;
+    text-align: left;
+}
+
+input, select, button {
+    font-family: 'Inter', sans-serif;
 }
 
 nav {
@@ -46,25 +67,31 @@ main {
 }
 
 section {
-    margin-bottom: 30px;
+    max-width: 600px;
+    margin: 0 auto 30px auto;
 }
 
 form {
     display: block; 
 }
 
-input[type="number"], select {
-    padding: 12px;
+input[type="number"], 
+select {
+    height: 44px;
+    padding: 0 12px;
     font-size: 1.1rem;
-    border: 1px solid #cccccc;
+    border: 1px solid #595959;
+    color: #222222;
     width: 100%; 
     margin-bottom: 15px;
     display: block;
+    background-color: #ffffff; /* білий фон для полів введення */
 }
 
-input[type="number"]:focus, select:focus {
-    border-color: #1f6feb;
-    outline: none;
+input[type="number"]:focus, 
+select:focus {
+    border-color: #2f5387;
+    outline: 2px solid rgba(26, 54, 93, 0.2);
 }
 
 input[type="radio"] {
@@ -79,24 +106,27 @@ label {
 }
 
 button {
-    padding: 12px 24px; 
+    height: 44px;
+    padding: 0 24px; 
     border-radius: 6px; 
-    background-color: #1f6feb; 
-    color: #ffffff;
+    background-color: #2f5387;
+    color: #ffffff; /* білий текст на кнопці для кращої видимості */
     border: none;
     width: 100%;
     font-size: 1.1rem;
+    font-weight: 600;
     cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
 button:hover {
-    background-color: #155bb5;
+    background-color: #1d375e; /* темніший відтінок синього при наведенні для кращого контрасту */
 }
 
 footer {
-    font-size: 0.875rem; 
+    font-size: 0.875rem; /* трохи менший шрифт для футера */
     padding: 20px; 
-    color: #676767;
+    color: #676767; /* більш світлий текст для футера */
     text-align: center; 
 }
 
@@ -105,23 +135,46 @@ footer {
     .converter-row {
         display: flex;
         flex-direction: row;
-        align-items: center;
+        align-items: flex-end;
         gap: 15px;
+        margin-bottom: 25px;
     }
-    .converter-row select {
-        flex: 1;
+
+    header h1 {
+        font-size: 2rem;
+    }
+
+    main h2 {
+        font-size: 1.4rem;
+        margin-left: -50px;
+    }
+    
+.converter-row .field-wrapper {
+        flex: 1; 
+    }
+
+    .converter-row .field-wrapper select,
+    .converter-row .field-wrapper input {
         margin-bottom: 0;
     }
-    .btn-swap {
-        width: auto;
-        padding: 10px 15px;
+    
+.btn-swap {
+        height: 44px;
+        width: 44px;
+        padding: 0;
         font-size: 1.2rem;
         background-color: transparent;
-        color: #1f6feb;
-        border: 2px solid #1f6feb;
+        color: #21416e; /* темний синій колір для кнопки обміну */
+        border: 2px solid #2f5387;
+        border-radius: 6px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
+    
     .btn-swap:hover {
-        background-color: #1f6feb;
+        background-color: #2f5387; /* темний синій фон при наведенні для кнопки обміну */
         color: #ffffff;
     }
 }
@@ -129,7 +182,7 @@ footer {
 @media (min-width: 1024px) {
     header {
         flex-direction: row;
-        justify-content: space-between;
+        justify-content: center;
     }
     form {
         max-width: 600px;
@@ -140,3 +193,12 @@ footer {
         box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
 }
+
+/* ==========================================================================
+   ОБҐРУНТУВАННЯ НЕЧІТКОЇ ВИМОГИ
+   Для конвертера обрано стриману "фінансову" палітру: приглушений синій 
+   (#2f5387), темно-синій (#1a365d) та темно-сірий (#595959) на нейтральному 
+   фоні (#f4f7f7). Синій колір асоціюється з банківською надійністю та безпекою. 
+   Відсутність яскравих або неонових відтінків знижує візуальний шум і створює 
+   відчуття точного та професійного інструменту.
+   ========================================================================== */
