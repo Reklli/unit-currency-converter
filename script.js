@@ -4,29 +4,75 @@ const exchangeRates = {
     UAH: 41.5
 };
 
-// Вибираємо контейнер списку валют та елемент лічильника
+const conversionHistory = [];
+
 const listContainer = document.querySelector('#rates-list');
 const ratesCount = document.querySelector('#rates-count');
 
-// Програмно видаляємо статичну заглушку з розмітки
+const converterForm = document.querySelector('#converter-form');
+const amountInput = document.querySelector('#amount-input');
+const fromSelect = document.querySelector('#from-select');
+const toSelect = document.querySelector('#to-select');
+const historyList = document.querySelector('#history-list');
+const conversionResult = document.querySelector('#conversion-result');
+
+// Видаляємо статичну заглушку з розмітки
 const placeholderItem = document.querySelector('#rates-list .placeholder');
 if (placeholderItem) {
     placeholderItem.remove();
 }
 
-// Обчислює сконвертовану суму
+// Рендеримо початковий список курсів на сторінці
+renderRates(exchangeRates);
+
+// Стрілкова функція обчислення та тестові виводи в консоль (Практична №6)
 const convert = (amount, rate) => amount * rate;
 
 showExchangeRates(exchangeRates);
-
-
 classifyAmount(30000 * exchangeRates.UAH);
 classifyAmount(10000 * exchangeRates.UAH);
 
 let convertedUah = convert(250, exchangeRates.UAH);
 console.log(`250 USD у гривнях: ${convertedUah} UAH`);
 
-renderRates(exchangeRates);
+
+// Обробка відправки форми без перезавантаження сторінки, додає новий запис
+// в історію конвертацій, перемальовує список та очищає форму
+converterForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    // Зчитання полів і приведення суми до типу Number
+    const amount = Number(amountInput.value);
+    const fromCurrency = fromSelect.value;
+    const toCurrency = toSelect.value;
+
+    const convertedAmount = calculateConversion(amount, fromCurrency, toCurrency);
+
+    const newRecord = {
+        amount: amount,
+        from: fromCurrency,
+        to: toCurrency,
+        result: Number(convertedAmount.toFixed(2))
+    };
+
+    conversionHistory.push(newRecord);
+    renderHistory(conversionHistory);
+
+    converterForm.reset();
+});
+
+// Миттєво перераховує результат конвертації при зміні початкової або цільової валюти
+fromSelect.addEventListener('change', updateInstantResult);
+toSelect.addEventListener('change', updateInstantResult);
+
+// Валідація суми в реальному часі під час введення: блокує нуль або від'ємні числа
+amountInput.addEventListener('input', () => {
+    if (amountInput.value !== '' && Number(amountInput.value) <= 0) {
+        amountInput.setCustomValidity('Сума має бути додатною');
+    } else {
+        amountInput.setCustomValidity('');
+    }
+});
 
 // Рендерить список актуальних курсів валют у DOM, додає data-атрибути,
 // умовний клас для високих курсів і оновлює загальний лічильник валют
@@ -69,4 +115,38 @@ function classifyAmount(result, threshold = 1000000) {
     } else {
         console.log(`Сума ${result} — звичайна сума (в межах порогу ${threshold})`);
     }
+}
+
+function calculateConversion(amount, from, to) {
+    const amountInUsd = amount / exchangeRates[from];
+    return amountInUsd * exchangeRates[to];
+}
+
+// Рендерить список історії конвертацій у DOM
+function renderHistory(history) {
+    historyList.innerHTML = '';
+
+    for (const record of history) {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${record.amount} ${record.from} = ${record.result} ${record.to}`;
+        listItem.dataset.result = record.result;
+
+        historyList.append(listItem);
+    }
+}
+
+// Перерахунок суми при зміні валюти без сабміту форми
+function updateInstantResult() {
+    const amount = Number(amountInput.value);
+
+    if (amountInput.value === '' || amount <= 0) {
+        conversionResult.textContent = 'Результат: —';
+        return;
+    }
+
+    const fromCurrency = fromSelect.value;
+    const toCurrency = toSelect.value;
+    const result = calculateConversion(amount, fromCurrency, toCurrency);
+
+    conversionResult.textContent = `Результат: ${amount} ${fromCurrency} = ${result.toFixed(2)} ${toCurrency}`;
 }

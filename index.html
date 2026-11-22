@@ -12,7 +12,7 @@
         <h1>Конвертер валют і одиниць</h1>
     </header>
 
-<main>
+    <main>
         <section>
             <h2>Виберіть тип конвертації</h2>
             <form action="#">
@@ -29,16 +29,16 @@
 
         <section>
             <h2>Форма введення значення й одиниць</h2>
-            <form action="#">
+            <form id="converter-form" action="#">
                 <label for="amount-input">Введіть значення:</label>
-                <input type="number" id="amount-input" name="amount" placeholder="Наприклад, 100">
+                <input type="number" id="amount-input" name="amount" placeholder="Наприклад, 100" required min="0.01" step="any">
                 <div class="converter-row">
                     <div class="field-wrapper">
                         <label for="from-select">З (валюта):</label>
                         <select id="from-select" name="from">
-                            <option value="usd">Долар (USD)</option>
-                            <option value="eur">Євро (EUR)</option>
-                            <option value="uah">Гривня (UAH)</option>
+                            <option value="USD">Долар (USD)</option>
+                            <option value="EUR">Євро (EUR)</option>
+                            <option value="UAH">Гривня (UAH)</option>
                         </select>
                     </div>
 
@@ -47,14 +47,21 @@
                     <div class="field-wrapper">
                         <label for="to-select">В (валюта):</label>
                         <select id="to-select" name="to">
-                            <option value="uah">Гривня (UAH)</option>
-                            <option value="usd">Долар (USD)</option>
-                            <option value="eur">Євро (EUR)</option>
+                            <option value="UAH">Гривня (UAH)</option>
+                            <option value="USD">Долар (USD)</option>
+                            <option value="EUR">Євро (EUR)</option>
                         </select>
                     </div>
                 </div>
-                <button type="button">Конвертувати</button>
+
+                <p id="conversion-result">Результат: —</p>
+                <button type="submit">Конвертувати</button>
             </form>
+        </section>
+
+        <section>
+            <h2>Історія конвертацій</h2>
+            <ul id="history-list"></ul>
         </section>
 
         <section>
