@@ -36,9 +36,11 @@
                     <div class="field-wrapper">
                         <label for="from-select">З (валюта):</label>
                         <select id="from-select" name="from">
-                            <option value="USD">Долар (USD)</option>
+                            <option value="USD">Долар США (USD)</option>
                             <option value="EUR">Євро (EUR)</option>
-                            <option value="UAH">Гривня (UAH)</option>
+                            <option value="PLN">Польський злотий (PLN)</option>
+                            <option value="GBP">Фунт стерлінгів (GBP)</option>
+                            <option value="JPY">Єна (JPY)</option>
                         </select>
                     </div>
 
@@ -47,9 +49,11 @@
                     <div class="field-wrapper">
                         <label for="to-select">В (валюта):</label>
                         <select id="to-select" name="to">
-                            <option value="UAH">Гривня (UAH)</option>
-                            <option value="USD">Долар (USD)</option>
                             <option value="EUR">Євро (EUR)</option>
+                            <option value="USD">Долар США (USD)</option>
+                            <option value="PLN">Польський злотий (PLN)</option>
+                            <option value="GBP">Фунт стерлінгів (GBP)</option>
+                            <option value="JPY">Єна (JPY)</option>
                         </select>
                     </div>
                 </div>
@@ -66,11 +70,15 @@
 
         <section>
             <h2>Актуальні курси валют</h2>
+            <p id="rates-info">Базова валюта: — | Дата оновлення: —</p>
+            <p id="loading-status" hidden>Завантаження курсів валют...</p>
+            <p id="error-message" hidden></p>
             <p id="rates-count">Завантаження курсів...</p>
+            <button type="button" id="refresh-btn">Оновити курси</button>
             <ul id="rates-list">
                 <li class="placeholder">USD: 1 (статична заглушка)</li>
             </ul>
-        </section>
+</section>
     </main>
 
     <footer>

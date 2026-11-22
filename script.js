@@ -1,13 +1,17 @@
-const exchangeRates = {
-    USD: 1,
-    EUR: 0.92,
-    UAH: 41.5
+let exchangeRates = {
+    USD: 1
 };
+
+const API_URL = 'https://api.frankfurter.dev/v1/latest?from=USD&to=EUR,PLN,GBP,JPY';
 
 const conversionHistory = [];
 
 const listContainer = document.querySelector('#rates-list');
 const ratesCount = document.querySelector('#rates-count');
+const ratesInfo = document.querySelector('#rates-info');
+const loadingStatus = document.querySelector('#loading-status');
+const errorMessage = document.querySelector('#error-message');
+
 
 const converterForm = document.querySelector('#converter-form');
 const amountInput = document.querySelector('#amount-input');
@@ -15,26 +19,14 @@ const fromSelect = document.querySelector('#from-select');
 const toSelect = document.querySelector('#to-select');
 const historyList = document.querySelector('#history-list');
 const conversionResult = document.querySelector('#conversion-result');
-
+const refreshBtn = document.querySelector('#refresh-btn');
 // Видаляємо статичну заглушку з розмітки
 const placeholderItem = document.querySelector('#rates-list .placeholder');
 if (placeholderItem) {
     placeholderItem.remove();
 }
 
-// Рендеримо початковий список курсів на сторінці
-renderRates(exchangeRates);
-
-// Стрілкова функція обчислення та тестові виводи в консоль (Практична №6)
-const convert = (amount, rate) => amount * rate;
-
-showExchangeRates(exchangeRates);
-classifyAmount(30000 * exchangeRates.UAH);
-classifyAmount(10000 * exchangeRates.UAH);
-
-let convertedUah = convert(250, exchangeRates.UAH);
-console.log(`250 USD у гривнях: ${convertedUah} UAH`);
-
+loadExchangeRates();
 
 // Обробка відправки форми без перезавантаження сторінки, додає новий запис
 // в історію конвертацій, перемальовує список та очищає форму
@@ -65,6 +57,12 @@ converterForm.addEventListener('submit', (event) => {
 fromSelect.addEventListener('change', updateInstantResult);
 toSelect.addEventListener('change', updateInstantResult);
 
+if (refreshBtn) {
+    refreshBtn.addEventListener('click', () => {
+        loadExchangeRates();
+    });
+}
+
 // Валідація суми в реальному часі під час введення: блокує нуль або від'ємні числа
 amountInput.addEventListener('input', () => {
     if (amountInput.value !== '' && Number(amountInput.value) <= 0) {
@@ -73,6 +71,72 @@ amountInput.addEventListener('input', () => {
         amountInput.setCustomValidity('');
     }
 });
+
+
+function showLoading(isLoading) {
+    if (loadingStatus) {
+        loadingStatus.hidden = !isLoading;
+    }
+
+    if (refreshBtn) {
+        refreshBtn.disabled = isLoading;
+    }
+}
+
+function showError(message) {
+    if (!errorMessage) {
+        return;
+    }
+
+    if (message) {
+        errorMessage.textContent = message;
+        errorMessage.hidden = false;
+    } else {
+        errorMessage.textContent = '';
+        errorMessage.hidden = true;
+    }
+}
+
+// Завантажує актуальні курси валют із Frankfurter API (https://api.frankfurter.dev)
+async function loadExchangeRates() {
+    showError('');
+    showLoading(true);
+
+    try {
+        const response = await fetch(API_URL);
+
+        if (!response.ok) {
+            if (response.status === 422) {
+                throw new Error('Перевірте код валюти');
+            }
+            throw new Error(`Помилка HTTP: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        exchangeRates = {
+            [data.base]: 1,
+            ...data.rates
+        };
+
+        renderRates(exchangeRates);
+
+        if (ratesInfo) {
+            ratesInfo.textContent = `Базова валюта: ${data.base} | Дата курсу ЄЦБ: ${data.date}`;
+        }
+
+        updateInstantResult();
+    } catch (error) {
+        if (error.message === 'Перевірте код валюти') {
+            showError(error.message);
+        } else {
+            showError('Не вдалося завантажити курси валют. Перевірте підключення до інтернету.');
+        }
+        console.error('Деталі помилки завантаження курсів:', error);
+    } finally {
+        showLoading(false);
+    }
+}
 
 // Рендерить список актуальних курсів валют у DOM, додає data-атрибути,
 // умовний клас для високих курсів і оновлює загальний лічильник валют
